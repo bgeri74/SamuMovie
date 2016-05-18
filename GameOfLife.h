@@ -35,12 +35,39 @@
 #include <QDebug>
 #include <sstream>
 #include "SamuQl.h"
+#include <vector>
+#include "cv.h"
+#include <opencv2/core/core.hpp>
+#include <opencv2/highgui/highgui.hpp>
+#include <opencv2/imgproc/imgproc.hpp>
+    struct COORD{
+      int x;
+      int y;
+    };
+
+    struct locations{
+      int count;
+      int startLocation;
+      int lineNumber;
+      
+    };
+    
+    
 
 class GameOfLife : public QThread
 {
     Q_OBJECT
 
-    int m_w {40}, m_h {30};
+    int m_w {80}, m_h {60};
+    
+    int drawIndex = 0;
+    int totalFiles = 0;
+    std::vector<cv::Mat> locationsMat;
+	std::vector<std::vector<cv::Point>> locationsPointVec;
+	std::vector<std::vector<locations>>  Locations;
+   
+    void drawThings ( bool **lattice );
+    
 
     bool ***lattices;
     int latticeIndex;
@@ -54,6 +81,8 @@ class GameOfLife : public QThread
     int manx {0};
     void house ( bool **lattice, int x, int y );
     int housex {0};
+    
+    void fromFile();
 
 
     bool **predictions;
